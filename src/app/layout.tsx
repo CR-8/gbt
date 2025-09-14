@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Nav from '@/modules/layout/nav'
+import Footer from '@/modules/layout/footer'
+import LenisProvider from '@/components/providers/LenisProvider'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +28,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased my-4 overflow-x-hidden`}
       >
-        {children}
+        <LenisProvider>
+          <div className="absolute top-0 w-full h-28 bg-transparent flex items-center justify-between px-12 z-[999]">
+            <Nav />
+          </div>
+          {children}
+          <Footer/>
+        </LenisProvider>
       </body>
     </html>
   );

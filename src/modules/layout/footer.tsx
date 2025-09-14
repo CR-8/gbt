@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, MapPin, Linkedin, Instagram, Phone } from 'lucide-react'
+import { Mail, MapPin, Linkedin, Instagram } from 'lucide-react'
 
 function Footer() {
   return (
@@ -65,7 +65,7 @@ function Footer() {
                   <span className="text-green-300">send us a message*</span>
                 </h3>
                 <p className="text-white/60 text-xs mt-2">
-                  *we're millennials and gen-z: please do not call us.
+                  *we&apos;re millennials and gen-z: please do not call us.
                 </p>
               </div>
               

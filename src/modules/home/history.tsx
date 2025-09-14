@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -164,10 +165,11 @@ function History() {
                 {/* Left side - Image */}
                 <div className="w-1/2 h-full flex items-center justify-center pr-12">
                 <div className="relative w-full max-w-lg h-3/4 rounded-2xl overflow-hidden shadow-2xl shadow-cyan-400/20 border border-cyan-400/30">
-                    <img
-                    src={event.image}
+                    <Image
+                    src={event.image!}
                     alt={event.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
 

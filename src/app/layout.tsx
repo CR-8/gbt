@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased my-4 overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <LenisProvider>
           <div className="absolute top-0 w-full h-28 bg-transparent flex items-center justify-between px-12 z-[999]">

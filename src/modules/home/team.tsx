@@ -39,25 +39,87 @@ function Team() {
     const [searchQuery, setSearchQuery] = useState('');
     const marqueeRef = useRef<HTMLDivElement>(null);
 
+    // Get current batch year (June of current year + 1)
+    const getCurrentBatchYear = () => {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
+        
+        // If we're past June, use next year's batch
+        const batchYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
+        return `June ${batchYear}`;
+    };
+
     // Fetch team members from API
     const fetchTeamMembers = async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetch('/api/TeamMembers/read?isActive=true');
+            
+            const currentBatch = getCurrentBatchYear();
+            console.log('🎓 Fetching leadership members for batch:', currentBatch);
+            
+            // Fetch active members from the current batch (June of current year + 1)
+            const response = await fetch(`/api/TeamMembers/read?isActive=true&batch=${encodeURIComponent(currentBatch)}`);
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
             const data = await response.json();
-            setTeamMembers(data);
-            setFilteredMembers(data);
-            if (data.length > 0) {
-                setSelectedMember(data[0]);
+            
+            // Filter to show ONLY leadership/HOD roles
+            const leadershipRoles = ['hod', 'head', 'president', 'vice president', 'secretary', 'lead', 'director', 'captain', 'coordinator', 'manager'];
+            
+            const leadershipMembers = data.filter((member: TeamMember) => {
+                return leadershipRoles.some(role => 
+                    member.role.toLowerCase().includes(role)
+                );
+            });
+            
+            // Sort leadership members by role importance
+            const sortedLeadership = leadershipMembers.sort((a: TeamMember, b: TeamMember) => {
+                const getRoleRank = (role: string) => {
+                    const lowerRole = role.toLowerCase();
+                    if (lowerRole.includes('president')) return 1;
+                    if (lowerRole.includes('hod') || lowerRole.includes('head')) return 2;
+                    if (lowerRole.includes('vice president')) return 3;
+                    if (lowerRole.includes('secretary')) return 4;
+                    if (lowerRole.includes('director')) return 5;
+                    if (lowerRole.includes('lead')) return 6;
+                    if (lowerRole.includes('captain')) return 7;
+                    if (lowerRole.includes('coordinator')) return 8;
+                    if (lowerRole.includes('manager')) return 9;
+                    return 10;
+                };
+                
+                const rankA = getRoleRank(a.role);
+                const rankB = getRoleRank(b.role);
+                
+                if (rankA !== rankB) return rankA - rankB;
+                return a.name.localeCompare(b.name);
+            });
+            
+            setTeamMembers(sortedLeadership);
+            setFilteredMembers(sortedLeadership);
+            
+            if (sortedLeadership.length > 0) {
+                setSelectedMember(sortedLeadership[0]);
             }
-            console.log('✅ Team members fetched successfully:', data.length);
+            
+            console.log('✅ Leadership members fetched successfully:', {
+                totalFetched: data.length,
+                leadershipCount: sortedLeadership.length,
+                batch: currentBatch,
+                leaders: sortedLeadership.map((member: TeamMember) => ({
+                    name: member.name,
+                    role: member.role
+                }))
+            });
+            
         } catch (err) {
-            console.error('❌ Error fetching team members:', err);
-            setError(err instanceof Error ? err.message : 'Failed to fetch team members');
+            console.error('❌ Error fetching leadership members:', err);
+            setError(err instanceof Error ? err.message : 'Failed to fetch leadership members');
         } finally {
             setLoading(false);
         }
@@ -97,9 +159,19 @@ function Team() {
         }
     }, [filteredMembers]);
 
-    // Fetch data on component mount
+    // Fetch data on component mount and set up auto-refresh
     useEffect(() => {
         fetchTeamMembers();
+        
+        // Set up automatic refresh every 5 minutes to showcase current HODs
+        const refreshInterval = setInterval(() => {
+            console.log('🔄 Auto-refreshing team data...');
+            fetchTeamMembers();
+        }, 5 * 60 * 1000); // 5 minutes
+        
+        return () => {
+            clearInterval(refreshInterval);
+        };
     }, []);
 
     // Loading state
@@ -150,7 +222,7 @@ function Team() {
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                             <input
                                 type="text"
-                                placeholder="Search by name, role, or department..."
+                                placeholder="Search leadership by name, role, or department..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-10 pr-4 py-2 w-full max-w-md bg-background border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -174,7 +246,7 @@ function Team() {
                         ) : (
                             <div className="text-center text-white">
                                 <Users size={48} className="mx-auto mb-4 opacity-50" />
-                                <p className="text-xl">Select a team member</p>
+                                <p className="text-xl">Select a leader</p>
                             </div>
                         )}
                     </div>
@@ -184,7 +256,7 @@ function Team() {
                         <div className="flex flex-col items-start justify-end mt-18 pl-8 pb-6 z-30 bg-neutral-900 rounded-tl-4xl h-full">
                             {selectedMember ? (
                                 <>
-                                    <div className="mb-4">
+                                    <div className="my-4">
                                         <h3 className="text-[2.5vw] md:text-[2vw] text-white font-semibold mb-2">{selectedMember.name}</h3>
                                         <p className="text-[1vw] md:text-[0.9vw] font-medium text-green-200 mb-1">
                                             {selectedMember.role} • {selectedMember.department}
@@ -261,7 +333,7 @@ function Team() {
                             ) : (
                                 <div className="text-center text-green-100">
                                     <Users size={48} className="mx-auto mb-4 opacity-50" />
-                                    <p className="text-xl">No member selected</p>
+                                    <p className="text-xl">No leader selected</p>
                                 </div>
                             )}
                         </div>
@@ -269,7 +341,7 @@ function Team() {
 
                     {/* Blue Division with Team Member Thumbnails */}
                     <div className="col-span-1 md:col-span-2 row-span-1 bg-neutral-900 overflow-hidden rounded-b-4xl relative">
-                        <div ref={marqueeRef} className="flex space-x-6 py-4 px-4">
+                        <div ref={marqueeRef} className="flex space-x-2 py-4 px-4">
                             {filteredMembers.map((member) => (
                                 <div
                                     key={member._id}
@@ -281,7 +353,11 @@ function Team() {
                                     onClick={() => handleMemberSelect(member)}
                                     style={{ width: '120px' }}
                                 >
-                                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-white">
+                                    <div className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                                        ['hod', 'head', 'president', 'vice president', 'secretary', 'lead', 'director'].some(role => 
+                                            member.role.toLowerCase().includes(role)
+                                        ) ? 'border-yellow-400' : 'border-white'
+                                    }`}>
                                         <Image
                                             src={member.image}
                                             alt={member.name}
@@ -292,6 +368,11 @@ function Team() {
                                     </div>
                                     <p className="text-white text-sm mt-2 font-semibold truncate w-full text-center">
                                         {member.name.split(' ')[0]}
+                                        {['hod', 'head', 'president', 'vice president', 'secretary', 'lead', 'director'].some(role => 
+                                            member.role.toLowerCase().includes(role)
+                                        ) && (
+                                            <span className="ml-1 text-yellow-400">★</span>
+                                        )}
                                     </p>
                                     <p className="text-white text-xs truncate w-full text-center">
                                         {member.isAlumni ? 'Alumni' : member.role}

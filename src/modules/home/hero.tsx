@@ -1,9 +1,8 @@
 import React from 'react'
-import Image from 'next/image'
 
 function Hero() {
   return (
-    <div className='w-[96vw] h-screen bg-neutral-900 rounded-3xl overflow-hidden relative shadow-2xl'>
+    <div className='w-[95vw] h-[96vh] bg-neutral-900 rounded-3xl overflow-hidden relative mt-2'>
         <div className='relative w-full h-full'>
           <video src="/v1.mp4" className='w-full h-full object-cover' autoPlay loop muted></video>
           <div className='absolute inset-0 bg-neutral-900/50'></div>

@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['images.pexels.com', 'images.unsplash.com','images.remotePatterns','picsum.photos','res.cloudinary.com'],
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 export default nextConfig;

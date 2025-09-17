@@ -123,7 +123,7 @@ function History() {
         className='w-screen rounded-3xl overflow-hidden relative'
       >
         {/* Fixed title */}
-        <div className="flex items-start justify-start mt-12 ml-12 z-30">
+        <div className="flex items-start justify-start ml-12 z-30">
           <h1 className="text-[10vw] font-bold ">
             Our History
           </h1>
@@ -139,7 +139,7 @@ function History() {
         {/* Horizontal scrolling container */}
         <div
         ref={scrollRef}
-        className="flex h-[60vh]"
+        className="flex h-[67vh]"
         style={{ width: `${historyData.length * 100}vw` }}
         >
         {historyData.map((event, index) => (

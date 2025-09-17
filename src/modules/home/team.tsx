@@ -178,10 +178,10 @@ function Team() {
     if (loading) {
         return (
             <div className="team">
-                <div className="w-[98vw] h-[96vh] bg-pink-400 rounded-3xl p-4 flex items-center justify-center">
+                <div className="w-[98vw] h-[96vh] rounded-3xl p-4 text-neutral-900 flex items-center justify-center">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-                        <p className="text-white text-xl">Loading Team...</p>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+                        <p className=" text-xl">Loading Team...</p>
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@ function Team() {
     if (error) {
         return (
             <div className="team">
-                <div className="w-[98vw] h-[96vh] bg-pink-400 rounded-3xl p-4 flex items-center justify-center">
+                <div className="w-[98vw] h-[96vh] rounded-3xl p-4 flex items-center justify-center">
                     <div className="text-center">
                         <div className="text-red-500">
                             <p className="text-xl mb-4">❌ Error loading team data</p>
@@ -258,7 +258,7 @@ function Team() {
                                 <>
                                     <div className="my-4">
                                         <h3 className="text-[2.5vw] md:text-[2vw] text-white font-semibold mb-2">{selectedMember.name}</h3>
-                                        <p className="text-[1vw] md:text-[0.9vw] font-medium text-green-200 mb-1">
+                                        <p className="text-[1vw] md:text-[0.9vw] font-medium text-green-200">
                                             {selectedMember.role} • {selectedMember.department}
                                         </p>
                                         <p className="text-[0.8vw] md:text-[0.7vw] text-green-300">
@@ -270,7 +270,7 @@ function Team() {
                                     </p>
                                     {/* Skills */}
                                     {selectedMember.skills && selectedMember.skills.length > 0 && (
-                                        <div className="mb-4">
+                                        <>
                                             <h4 className="text-[1vw] md:text-[0.9vw] font-semibold mb-2 text-green-200">Skills</h4>
                                             <div className="flex flex-wrap gap-2">
                                                 {selectedMember.skills.map((skill, index) => (
@@ -282,7 +282,7 @@ function Team() {
                                                     </span>
                                                 ))}
                                             </div>
-                                        </div>
+                                        </>
                                     )}
                                     {/* Social Links */}
                                     <div className="flex gap-4 items-center p-4">
@@ -341,11 +341,81 @@ function Team() {
 
                     {/* Blue Division with Team Member Thumbnails */}
                     <div className="col-span-1 md:col-span-2 row-span-1 bg-neutral-900 overflow-hidden rounded-b-4xl relative">
-                        <div ref={marqueeRef} className="flex space-x-2 py-4 px-4">
-                            {filteredMembers.map((member) => (
+                        <style jsx>{`
+                            .marquee-container {
+                                display: flex;
+                                width: fit-content;
+                                animation: marquee 40s linear infinite;
+                            }
+                            
+                            .marquee-container:hover {
+                                animation-play-state: paused;
+                            }
+                            
+                            @keyframes marquee {
+                                0% { 
+                                    transform: translateX(0); 
+                                }
+                                100% { 
+                                    transform: translateX(calc(-100% / 2)); 
+                                }
+                            }
+                            
+                            /* Alternative smoother version with different speeds based on content */
+                            .marquee-fast {
+                                animation-duration: 30s;
+                            }
+                            
+                            .marquee-slow {
+                                animation-duration: 30s;
+                            }
+                        `}</style>
+                        
+                        <div className="flex py-4 px-4 marquee-container">
+                            {/* First set of members */}
+                            {filteredMembers.map((member, index) => (
                                 <div
-                                    key={member._id}
-                                    className={`flex-shrink-0 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
+                                    key={`original-${member._id}-${index}`}
+                                    className={`flex-shrink-0 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 mr-2 ${
+                                        selectedMember?._id === member._id
+                                            ? ''
+                                            : 'hover:scale-105'
+                                    }`}
+                                    onClick={() => handleMemberSelect(member)}
+                                    style={{ width: '120px' }}
+                                >
+                                    <div className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                                        ['hod', 'head', 'president', 'vice president', 'secretary', 'lead', 'director'].some(role => 
+                                            member.role.toLowerCase().includes(role)
+                                        ) ? 'border-yellow-400' : 'border-white'
+                                    }`}>
+                                        <Image
+                                            src={member.image}
+                                            alt={member.name}
+                                            width={80}
+                                            height={80}
+                                            className="object-cover w-full h-full"
+                                        />
+                                    </div>
+                                    <p className="text-white text-sm mt-2 font-semibold truncate w-full text-center">
+                                        {member.name.split(' ')[0]}
+                                        {['hod', 'head', 'president', 'vice president', 'secretary', 'lead', 'director'].some(role => 
+                                            member.role.toLowerCase().includes(role)
+                                        ) && (
+                                            <span className="ml-1 text-yellow-400">★</span>
+                                        )}
+                                    </p>
+                                    <p className="text-white text-xs truncate w-full text-center">
+                                        {member.isAlumni ? 'Alumni' : member.role}
+                                    </p>
+                                </div>
+                            ))}
+                            
+                            {/* Duplicate set for seamless loop - only show when not searching */}
+                            {!searchQuery && filteredMembers.map((member, index) => (
+                                <div
+                                    key={`duplicate-${member._id}-${index}`}
+                                    className={`flex-shrink-0 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 mr-2 ${
                                         selectedMember?._id === member._id
                                             ? ''
                                             : 'hover:scale-105'

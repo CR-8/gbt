@@ -7,7 +7,7 @@ import Team from '@/modules/home/team'
 
 function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-bg-main mt-2">
+    <div className="flex flex-col items-center justify-center mt-2">
       <Hero/>
       <About/>
       <History/>

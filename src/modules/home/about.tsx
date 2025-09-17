@@ -144,14 +144,14 @@ function About() {
   ];
 
   return (
-    <div className="p-8 min-h-screen flex items-center justify-center">
-      <div className="max-w-6xl mx-auto">
+    <div className="p-4 min-h-screen flex items-center justify-center">
+      <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-center mt-16 mb-12">
-          <h1 ref={headingRef} className="text-6xl md:text-8xl flex items-start justify-center lg:text-[10vw] font-bold text-black dark:text-text-white">
+          <h1 ref={headingRef} className="text-[10vw] md:text-8xl flex items-start justify-center lg:text-[10vw] font-bold text-black dark:text-text-white">
             About Us
           </h1>
         </div>
-        <div ref={textRef} className="text-center max-w-6xl mx-auto text-text-secondary dark:text-text-muted text-[4vh] leading-relaxed">
+        <div ref={textRef} className="text-center max-w-7xl mx-auto text-text-secondary dark:text-text-muted text-[4vh] leading-relaxed">
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. {svgs[0]} Distinctio omnis fugiat repudiandae at earum adipisci consequatur odit, repellendus, dolores pariatur praesentium animi voluptatum debitis aspernatur dolorem vitae. Fugit temporibus error possimus expedita quibusdam explicabo adipisci, {svgs[1]} dolores numquam tenetur architecto accusantium reprehenderit perferendis aperiam enim laudantium! Ullam consequuntur voluptate sed quisquam expedita incidunt, repellendus nobis debitis nulla laudantium, {svgs[2]} architecto minima odio nesciunt. Commodi qui excepturi consectetur tempore vel earum numquam recusandae blanditiis, nesciunt eveniet veniam! Officiis labore eius quae recusandae! Dolor!
           </p>

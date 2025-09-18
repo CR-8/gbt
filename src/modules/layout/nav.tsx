@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Dock from '@/components/ui/Dock';
-import { Home, Archive, Settings, FolderOpen, Users } from 'lucide-react';
+import { Home, Archive, FolderOpen, Users } from 'lucide-react';
 
 export default function Nav() {
   const [isVisible, setIsVisible] = useState(true);
@@ -59,13 +59,8 @@ export default function Nav() {
     },
     { 
       icon: <Archive className="w-6 h-6 text-white" />, 
-      label: 'Archive', 
-      onClick: () => console.log('Archive clicked') 
-    },
-    { 
-      icon: <Settings className="w-6 h-6 text-white" />, 
-      label: 'Settings', 
-      onClick: () => console.log('Settings clicked') 
+      label: 'Events', 
+      onClick: () => window.location.href = '/events' 
     }
   ];
 

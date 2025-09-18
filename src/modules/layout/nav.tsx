@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Dock from '@/components/ui/Dock';
+import Dock from '@/components/ui/dock';
 import { Home, Archive, Settings, FolderOpen, Users } from 'lucide-react';
 
 export default function Nav() {

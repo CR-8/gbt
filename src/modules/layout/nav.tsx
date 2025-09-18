@@ -12,7 +12,6 @@ export default function Nav() {
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
-
     const handleScroll = () => {
       // Hide navbar immediately when scrolling starts
       setIsVisible(false);

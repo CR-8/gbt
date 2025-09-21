@@ -1,28 +1,20 @@
 "use client"
 
-import { usePathname } from 'next/navigation';
-import Header from '@/modules/layout/header'
-import Footer from '@/modules/layout/footer'
-import Nav from "@/modules/layout/nav";
+import { usePathname } from 'next/navigation'
+import { AdminLayout } from '@/modules/layouts/admin-layout'
+import { PublicLayout } from '@/modules/layouts/public-layout'
 
 interface LayoutWrapperProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
-  const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith('/admin');
+  const pathname = usePathname()
+  const isAdminRoute = pathname?.startsWith('/admin')
 
-  return (
-    <>
-      {!isAdminRoute && (
-        <div className="absolute top-0 w-full h-28 bg-transparent flex items-center justify-between px-12 z-[999]">
-          <Header />
-        </div>
-      )}
-      {children}
-      {!isAdminRoute && <Nav/>}
-      {!isAdminRoute && <Footer/>}
-    </>
-  );
+  if (isAdminRoute) {
+    return children // Admin pages handle their own layout
+  }
+
+  return <PublicLayout>{children}</PublicLayout>
 }

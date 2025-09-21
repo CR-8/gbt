@@ -1,9 +1,9 @@
 import React from 'react'
-import Hero from '@/modules/home/hero'
-import About from '@/modules/home/about'
-import History from '@/modules/home/history'
-import Project from '@/modules/home/projects'
-import Team from '@/modules/home/team'
+import Hero from '@/modules/sections/hero'
+import About from '@/modules/sections/about'
+import History from '@/modules/sections/history'
+import Project from '@/modules/sections/projects'
+import Team from '@/modules/sections/team'
 
 function Home() {
   return (

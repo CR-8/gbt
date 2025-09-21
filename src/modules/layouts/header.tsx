@@ -29,7 +29,7 @@ function Header() {
                         className="text-text-light hover:text-text-brand-hover transition-colors"
                         aria-label="Email"
                     >
-                        <Mail size={24} />
+                        <Mail size={24} className="text-black dark:text-white mr-2" />
                     </a>
                     <div className="absolute top-full right-0 mt-2 hidden group-hover:block bg-tooltip-bg border border-tooltip-border rounded-lg shadow-xl p-4 z-10 max-w-[280px] transform transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2">
                         <div className="text-sm text-text-secondary">

@@ -2,12 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppSidebar } from "@/components/admin/app-sidebar"
-import { SiteHeader } from "@/components/admin/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { AdminLayout } from '@/modules/layouts'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -285,26 +280,16 @@ export default function DocumentManagementPage() {
 
   if (loading) {
     return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <SiteHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <div className="text-lg">Loading documents...</div>
-            </div>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
+      <AdminLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-lg">Loading documents...</div>
+        </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <AdminLayout>
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
@@ -637,8 +622,6 @@ export default function DocumentManagementPage() {
               )}
             </CardContent>
           </Card>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
-  )
+      </AdminLayout>
+    )
 }

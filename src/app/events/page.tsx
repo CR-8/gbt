@@ -1,6 +1,6 @@
 import React from 'react'
-import Grid from '@/modules/events/grid'
-import Welcome from '@/modules/events/welcome'
+import Grid from '@/modules/sections/events/grid'
+import Welcome from '@/modules/sections/events/welcome'
 
 function Events() {
   return (

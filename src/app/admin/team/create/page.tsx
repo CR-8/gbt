@@ -2,12 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppSidebar } from "@/components/admin/app-sidebar"
-import { SiteHeader } from "@/components/admin/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { AdminLayout } from '@/modules/layouts'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -146,11 +141,8 @@ export default function CreateTeamMemberPage() {
   ]
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <AdminLayout>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Header */}
           <div className="flex items-center gap-4">
             <Button
@@ -383,7 +375,6 @@ export default function CreateTeamMemberPage() {
             </div>
           </form>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </AdminLayout>
   )
 }

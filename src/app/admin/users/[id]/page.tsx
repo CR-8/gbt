@@ -2,12 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { AppSidebar } from "@/components/admin/app-sidebar"
-import { SiteHeader } from "@/components/admin/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { AdminLayout } from '@/modules/layouts'
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -146,42 +141,31 @@ export default function UserDetailsPage() {
 
   if (loading) {
     return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <SiteHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <div className="text-lg">Loading user details...</div>
-            </div>
+      <AdminLayout>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-lg">Loading user details...</div>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
+        </div>
+      </AdminLayout>
     )
   }
 
   if (!user) {
     return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <SiteHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <div className="text-lg text-muted-foreground">User not found</div>
-            </div>
+      <AdminLayout>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-lg text-muted-foreground">User not found</div>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
+        </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <AdminLayout>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -421,7 +405,6 @@ export default function UserDetailsPage() {
             </TabsContent>
           </Tabs>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </AdminLayout>
   )
 }

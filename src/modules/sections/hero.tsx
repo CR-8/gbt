@@ -4,8 +4,8 @@ function Hero() {
   return (
     <div className='w-[95vw] h-[96vh] bg-neutral-900 rounded-3xl overflow-hidden relative mt-2'>
         <div className='relative w-full h-full'>
-          <video src="/v1.mp4" className='w-full h-full object-cover' autoPlay loop muted></video>
-          <div className='absolute inset-0 bg-neutral-900/50'></div>
+          <video src="/v1.mp4" className='w-full h-full aspect-video object-cover' autoPlay loop></video>
+          <div className='absolute inset-0 bg-neutral-900/20'></div>
             <div className='absolute inset-0 flex flex-col items-start justify-end font-sans m-6 md:m-12 text-white z-10'>
                 <h1 className='text-4xl md:text-6xl lg:text-[8vw] font-bold'>GROBOTS</h1>
                 <p className='text-left mb-4 text-base md:text-lg max-w-lg ml-4 md:ml-8'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis optio quas cumque explicabo tempora harum. Veritatis enim asperiores dolor quis?</p>

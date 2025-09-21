@@ -2,12 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { AppSidebar } from "@/components/admin/app-sidebar"
-import { SiteHeader } from "@/components/admin/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { AdminLayout } from '@/modules/layouts'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -207,29 +202,22 @@ export default function EditTeamMemberPage() {
 
   if (fetchLoading) {
     return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <SiteHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <div className="flex items-center justify-center min-h-[400px]">
-              <div className="flex items-center gap-2">
-                <Loader2 className="h-6 w-6 animate-spin" />
-                <span>Loading team member...</span>
-              </div>
+      <AdminLayout>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span>Loading team member...</span>
             </div>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
+        </div>
+      </AdminLayout>
     )
   }
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <AdminLayout>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           {/* Header */}
           <div className="flex items-center gap-4">
             <Button
@@ -462,7 +450,6 @@ export default function EditTeamMemberPage() {
             </div>
           </form>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </AdminLayout>
   )
 }

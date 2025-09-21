@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { achievementsData } from '../data/achievements/achievementsData.js';
 import Achievement from '../models/Achievement.js';
 import dbConnect from '../lib/db.js';

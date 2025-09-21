@@ -5,7 +5,9 @@ if (process.env.NODE_ENV === 'production') {
   const noop = () => {};
   try {
     console.log = noop; console.debug = noop; console.info = noop; console.warn = noop; console.error = noop;
-  } catch (_) {}
+  } catch (err) {
+    console.log("Encountered error : " , err)
+  }
 }
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://grobotsclub:uDzgEKVv3Be8Qt5k@main-website.7elkaai.mongodb.net/?retryWrites=true&w=majority&appName=Main-Website";

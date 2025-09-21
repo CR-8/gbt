@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authAPI, apiUtils } from '@/lib/apiService';
+import { authAPI } from '@/lib/apiService';
 
 const AuthContext = createContext({
   user: null,

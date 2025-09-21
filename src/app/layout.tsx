@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from '@/modules/layout/header'
-import Footer from '@/modules/layout/footer'
 import LenisProvider from '@/components/providers/LenisProvider'
-import Nav from "@/modules/layout/nav";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import LayoutWrapper from './LayoutWrapper';
 
 export const metadata: Metadata = {
   title:  "ROBOTICS CLUB SRMCEM",
@@ -29,15 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-bg-main`}
+        className="antialiased overflow-x-hidden bg-bg-main"
       >
         <LenisProvider>
-          <div className="absolute top-0 w-full h-28 bg-transparent flex items-center justify-between px-12 z-[999]">
-            <Header />
-          </div>
-          {children}
-          <Nav/>
-          <Footer/>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
         </LenisProvider>
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { Linkedin, Mail, Instagram, Github, Award, Users, Calendar, Search } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Linkedin, Mail, Instagram, Github, Users, Search } from 'lucide-react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
@@ -30,6 +30,17 @@ interface TeamMember {
     updatedAt: string;
 }
 
+// Get current batch year (June of current year + 1)
+const getCurrentBatchYear = () => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
+    
+    // If we're past June, use next year's batch
+    const batchYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
+    return `May ${batchYear}`;
+};
+
 function Team() {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [filteredMembers, setFilteredMembers] = useState<TeamMember[]>([]);
@@ -39,19 +50,8 @@ function Team() {
     const [searchQuery, setSearchQuery] = useState('');
     const marqueeRef = useRef<HTMLDivElement>(null);
 
-    // Get current batch year (June of current year + 1)
-    const getCurrentBatchYear = () => {
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-        const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-11
-        
-        // If we're past June, use next year's batch
-        const batchYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
-        return `June ${batchYear}`;
-    };
-
     // Fetch team members from API
-    const fetchTeamMembers = async () => {
+    const fetchTeamMembers = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
@@ -60,7 +60,7 @@ function Team() {
             console.log('🎓 Fetching leadership members for batch:', currentBatch);
             
             // Fetch active members from the current batch (June of current year + 1)
-            const response = await fetch(`/api/TeamMembers/read?isActive=true&batch=${encodeURIComponent(currentBatch)}`);
+            const response = await fetch(`/api/team/read?isActive=true&batch=${encodeURIComponent(currentBatch)}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -123,7 +123,7 @@ function Team() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     // Handle member selection
     const handleMemberSelect = (member: TeamMember) => {
@@ -138,10 +138,10 @@ function Team() {
             member.department.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredMembers(filtered);
-        if (filtered.length > 0 && !filtered.includes(selectedMember!)) {
+        if (filtered.length > 0 && !filtered.some(member => member._id === selectedMember?._id)) {
             setSelectedMember(filtered[0]);
         }
-    }, [searchQuery, teamMembers, selectedMember]);
+    }, [searchQuery, teamMembers, selectedMember?._id]);
 
     // GSAP marquee animation
     useEffect(() => {
@@ -172,7 +172,7 @@ function Team() {
         return () => {
             clearInterval(refreshInterval);
         };
-    }, []);
+    }, [fetchTeamMembers]);
 
     // Loading state
     if (loading) {

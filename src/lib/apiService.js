@@ -6,7 +6,9 @@ if (process.env.NODE_ENV === 'production') {
   // Guard against read-only console in some environments
   try {
     console.log = noop; console.debug = noop; console.info = noop; console.warn = noop; console.error = noop;
-  } catch (_) {}
+  } catch (err) {
+    console.log("Error Encountered : " , err)
+  }
 }
 
 // Create axios instance with base configuration

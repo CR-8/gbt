@@ -13,6 +13,39 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.line-clamp-4 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -112,7 +145,7 @@
   --gray-700: rgb(55, 65, 81);
   --gray-800: rgb(31, 41, 55);
   --gray-900: rgb(17, 24, 39);
-  
+
   /* Orange Brand Colors */
   --orange-100: rgb(255, 237, 213);
   --orange-200: rgb(254, 215, 170);
@@ -123,7 +156,7 @@
   --orange-700: rgb(194, 65, 12);
   --orange-800: rgb(154, 52, 18);
   --orange-900: rgb(124, 45, 18);
-  
+
   /* Green Colors */
   --green-100: rgb(220, 252, 231);
   --green-200: rgb(187, 247, 208);
@@ -134,11 +167,11 @@
   --green-700: rgb(21, 128, 61);
   --green-800: rgb(22, 101, 52);
   --green-900: rgb(20, 83, 45);
-  
+
   /* Pure Colors */
   --white: rgb(255, 255, 255);
   --black: rgb(0, 0, 0);
-  
+
   /* Purple Colors for tags */
   --purple-100: rgb(243, 232, 255);
   --purple-200: rgb(233, 213, 255);
@@ -149,7 +182,7 @@
   --purple-700: rgb(109, 40, 217);
   --purple-800: rgb(91, 33, 182);
   --purple-900: rgb(76, 29, 149);
-  
+
   /* Red Colors for tags */
   --red-100: rgb(254, 226, 226);
   --red-200: rgb(254, 202, 202);
@@ -166,7 +199,7 @@
   --tooltip-border: var(--gray-200);
   --card-bg: var(--white);
   --card-border: var(--gray-100);
-  
+
   /* Text Colors */
   --text-primary: var(--gray-900);
   --text-secondary: var(--gray-800);
@@ -176,17 +209,17 @@
   --text-brand: var(--orange-500);
   --text-brand-hover: var(--orange-400);
   --text-link: var(--orange-600);
-  
+
   /* Background Colors */
   --bg-main: var(--gray-100);
   --bg-card: var(--white);
   --bg-tooltip: var(--gray-50);
   --bg-overlay: rgba(0, 0, 0, 0.5);
-  
+
   /* Interactive Colors */
   --hover-bg: var(--gray-200);
   --focus-ring: var(--orange-500);
-  
+
   /* Button Colors */
   --btn-primary-bg: var(--white);
   --btn-primary-text: var(--green-900);
@@ -248,24 +281,24 @@
   --gray-200: rgb(39, 39, 42);
   --gray-800: rgb(212, 212, 216);
   --gray-900: rgb(250, 250, 250);
-  
+
   --tooltip-bg: rgb(24, 24, 27);
   --tooltip-border: rgb(39, 39, 42);
   --card-bg: rgb(24, 24, 27);
   --card-border: rgb(39, 39, 42);
-  
+
   --text-primary: rgb(250, 250, 250);
   --text-secondary: rgb(212, 212, 216);
   --text-muted: rgb(161, 161, 170);
   --text-light: rgb(113, 113, 122);
-  
+
   --bg-main: rgb(9, 9, 11);
   --bg-card: rgb(24, 24, 27);
   --bg-tooltip: rgb(24, 24, 27);
   --bg-overlay: rgba(0, 0, 0, 0.8);
-  
+
   --hover-bg: rgb(39, 39, 42);
-  
+
   --btn-primary-bg: rgb(24, 24, 27);
   --btn-primary-text: rgb(250, 250, 250);
   --btn-primary-hover: rgb(39, 39, 42);
@@ -341,7 +374,7 @@
   --color-gray-700: var(--gray-700);
   --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
-  
+
   --color-orange-100: var(--orange-100);
   --color-orange-200: var(--orange-200);
   --color-orange-300: var(--orange-300);
@@ -351,7 +384,7 @@
   --color-orange-700: var(--orange-700);
   --color-orange-800: var(--orange-800);
   --color-orange-900: var(--orange-900);
-  
+
   --color-green-100: var(--green-100);
   --color-green-200: var(--green-200);
   --color-green-300: var(--green-300);
@@ -361,7 +394,7 @@
   --color-green-700: var(--green-700);
   --color-green-800: var(--green-800);
   --color-green-900: var(--green-900);
-  
+
   --color-purple-100: var(--purple-100);
   --color-purple-200: var(--purple-200);
   --color-purple-300: var(--purple-300);
@@ -371,7 +404,7 @@
   --color-purple-700: var(--purple-700);
   --color-purple-800: var(--purple-800);
   --color-purple-900: var(--purple-900);
-  
+
   --color-red-100: var(--red-100);
   --color-red-200: var(--red-200);
   --color-red-300: var(--red-300);
@@ -381,10 +414,10 @@
   --color-red-700: var(--red-700);
   --color-red-800: var(--red-800);
   --color-red-900: var(--red-900);
-  
+
   --color-white: var(--white);
   --color-black: var(--black);
-  
+
   /* Semantic Color Classes */
   --color-tooltip-bg: var(--tooltip-bg);
   --color-tooltip-border: var(--tooltip-border);

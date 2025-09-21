@@ -138,7 +138,8 @@ export async function POST(request) {
       );
 
       // Remove password from response
-      const { password: _, ...userWithoutPassword } = savedUser.toObject();
+      const userWithoutPassword = savedUser.toObject();
+      delete userWithoutPassword.password;
 
       return NextResponse.json(
         {

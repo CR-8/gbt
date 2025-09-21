@@ -117,7 +117,8 @@ export async function POST(request) {
     if (existingImages) {
       try {
         finalImages = JSON.parse(existingImages);
-      } catch (e) {
+      } catch (err) {
+        console.log("Error Encountered : " , err)
         finalImages = existingAchievement.images;
       }
     }

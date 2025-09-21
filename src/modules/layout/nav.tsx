@@ -1,17 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Dock from '@/components/ui/Dock';
-import { Home, Archive, FolderOpen, Users } from 'lucide-react';
+import { Home, Archive, Users, Book } from 'lucide-react';
 
 export default function Nav() {
   const [isVisible, setIsVisible] = useState(true);
   const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-
     const handleScroll = () => {
       // Hide navbar immediately when scrolling starts
       setIsVisible(false);
@@ -48,19 +45,19 @@ export default function Nav() {
       onClick: () => window.location.href = '/' 
     },
     { 
-      icon: <FolderOpen className="w-6 h-6 text-white" />, 
-      label: 'Projects', 
-      onClick: () => console.log('Projects clicked') 
-    },
-    { 
       icon: <Users className="w-6 h-6 text-white" />, 
       label: 'Team', 
-      onClick: () => console.log('Team clicked') 
+      onClick: () => window.location.href = '/team' 
     },
     { 
       icon: <Archive className="w-6 h-6 text-white" />, 
       label: 'Events', 
       onClick: () => window.location.href = '/events' 
+    },
+    { 
+      icon: <Book className="w-6 h-6 text-white" />, 
+      label: 'Blogs', 
+      onClick: () => window.location.href = '/blogs' 
     }
   ];
 

@@ -1,40 +1,6 @@
 import { NextResponse } from "next/server";
-
-// Mock events data since the import was missing
-const eventsData = {
-  events: [
-    {
-      id: 1,
-      title: "Robotics Workshop 2024",
-      description: "Learn the basics of robotics and automation",
-      date: "2024-03-15",
-      location: "Main Campus",
-      image: "/images/workshop.jpg",
-      capacity: 50,
-      registered: 35,
-      agenda: [
-        { topic: "Introduction to Robotics", time: "9:00 AM - 10:00 AM" },
-        { topic: "Hands-on Practice", time: "10:00 AM - 12:00 PM" },
-        { topic: "Q&A Session", time: "12:00 PM - 1:00 PM" }
-      ]
-    },
-    {
-      id: 2,
-      title: "BattleBots Competition",
-      description: "Annual robot fighting competition",
-      date: "2024-04-20",
-      location: "Engineering Lab",
-      image: "/images/battlebots.jpg",
-      capacity: 20,
-      registered: 18,
-      agenda: [
-        { topic: "Safety Briefing", time: "8:00 AM - 8:30 AM" },
-        { topic: "Preliminary Rounds", time: "8:30 AM - 11:00 AM" },
-        { topic: "Final Championship", time: "11:00 AM - 2:00 PM" }
-      ]
-    }
-  ]
-};
+import Event from "@/models/Event";
+import dbConnect from "@/lib/db";
 
 export async function GET(request) {
   console.log('📅 Events API: GET request received');
@@ -46,13 +12,21 @@ export async function GET(request) {
     const limit = searchParams.get("limit");
     const page = searchParams.get("page");
     const status = searchParams.get("status");
+    const category = searchParams.get("category");
+    const featured = searchParams.get("featured");
+    const search = searchParams.get("search");
 
-    console.log('📋 Query parameters:', { id, limit, page, status });
+    console.log('📋 Query parameters:', { id, limit, page, status, category, featured, search });
+
+    console.log('🔌 Attempting database connection...');
+    await dbConnect();
+    console.log('✅ Database connected successfully');
 
     // If ID is provided, fetch specific event
     if (id) {
       console.log('🔍 Fetching event by ID:', id);
-      const event = eventsData.events.find(e => e.id === parseInt(id));
+      
+      const event = await Event.findById(id);
 
       if (!event) {
         console.log('❌ Event not found with ID:', id);
@@ -62,95 +36,93 @@ export async function GET(request) {
         );
       }
 
-      // Transform to admin format
-      const transformedEvent = {
-        id: event.id,
-        name: event.title,
-        description: event.description,
-        startDate: event.date,
-        endDate: event.date, // Using same date for now
-        location: event.location,
-        status: event.registered >= event.capacity ? 'Full' : 'Active',
-        registrations: event.registered,
-        maxCapacity: event.capacity,
-        poster: event.image,
-        subEvents: event.agenda ? event.agenda.map((item, index) => ({
-          id: index + 1,
-          name: item.topic,
-          description: item.time,
-          maxTeams: 10,
-          registered: Math.floor(Math.random() * 10)
-        })) : []
-      };
-
-      console.log('✅ Event found and transformed:', {
-        id: transformedEvent.id,
-        name: transformedEvent.name,
-        status: transformedEvent.status
+      console.log('✅ Event found by ID:', {
+        id: event._id,
+        title: event.title,
+        status: event.status
       });
 
       return NextResponse.json(
         {
           message: "Event retrieved successfully",
-          event: transformedEvent,
+          event,
         },
         { status: 200 }
       );
     }
 
-    // Transform all events to admin format
-    console.log('📊 Transforming all events to admin format');
-    const transformedEvents = eventsData.events.map(event => ({
-      id: event.id,
-      name: event.title,
-      description: event.description,
-      startDate: event.date,
-      endDate: event.date, // Using same date for now
-      location: event.location,
-      status: event.registered >= event.capacity ? 'Full' : 'Active',
-      registrations: event.registered,
-      maxCapacity: event.capacity,
-      poster: event.image,
-      subEvents: event.agenda ? event.agenda.map((item, index) => ({
-        id: index + 1,
-        name: item.topic,
-        description: item.time,
-        maxTeams: 10,
-        registered: Math.floor(Math.random() * 10)
-      })) : []
-    }));
-
-    // Apply status filter
-    let filteredEvents = transformedEvents;
+    // Build query filters
+    const filters = {};
+    console.log('🔍 Building database filters...');
+    
     if (status && status !== 'All') {
-      filteredEvents = transformedEvents.filter(event => event.status === status);
-      console.log('🔍 Applied status filter:', { status, filteredCount: filteredEvents.length });
+      filters.status = status;
+      console.log('📊 Added status filter:', status);
+    }
+    if (category && category !== 'All') {
+      filters.category = category;
+      console.log('🏷️ Added category filter:', category);
+    }
+    if (featured !== null) {
+      filters.featured = featured === 'true';
+      console.log('⭐ Added featured filter:', featured === 'true');
+    }
+    if (search) {
+      filters.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { shortDescription: { $regex: search, $options: 'i' } },
+        { tags: { $in: [new RegExp(search, 'i')] } }
+      ];
+      console.log('🔍 Added search filter:', search);
     }
 
-    // Apply pagination
-    let paginatedEvents = filteredEvents;
-    let total = filteredEvents.length;
+    console.log('📊 Final filters object:', filters);
 
+    // Get total count for pagination
+    const total = await Event.countDocuments(filters);
+    console.log('� Total events count:', total);
+
+    // Build query with sorting
+    let query = Event.find(filters).sort({ startDate: 1, createdAt: -1 });
+
+    // Apply pagination
     if (limit) {
       const limitNum = parseInt(limit);
       const pageNum = parseInt(page) || 1;
       const skip = (pageNum - 1) * limitNum;
 
-      paginatedEvents = filteredEvents.slice(skip, skip + limitNum);
-      console.log('📄 Pagination applied:', { page: pageNum, limit: limitNum, skip, total, paginatedCount: paginatedEvents.length });
+      query = query.skip(skip).limit(limitNum);
+      console.log('📄 Pagination applied:', { page: pageNum, limit: limitNum, skip });
     }
 
-    console.log('✅ Events processed successfully:', {
-      totalEvents: eventsData.events.length,
-      transformedCount: transformedEvents.length,
-      filteredCount: filteredEvents.length,
-      paginatedCount: paginatedEvents.length
+    // Execute query
+    console.log('🚀 Executing database query...');
+    const events = await query;
+
+    console.log('✅ Events fetched successfully:', {
+      count: events.length,
+      filters: filters,
+      total: total
     });
+
+    // Calculate stats
+    const stats = {
+      totalEvents: total,
+      upcomingEvents: await Event.countDocuments({ status: 'Upcoming' }),
+      activeEvents: await Event.countDocuments({ status: 'Active' }),
+      completedEvents: await Event.countDocuments({ status: 'Completed' }),
+      totalRegistrations: await Event.aggregate([
+        { $group: { _id: null, total: { $sum: '$registered' } } }
+      ]).then(result => result[0]?.total || 0),
+      featuredEvents: await Event.countDocuments({ featured: true })
+    };
 
     return NextResponse.json(
       {
         message: "Events retrieved successfully",
-        events: paginatedEvents,
+        events,
+        stats,
         total,
         ...(limit && {
           pagination: {
@@ -170,6 +142,15 @@ export async function GET(request) {
       code: error.code
     });
 
+    if (error.name === "CastError") {
+      console.log('🔄 CastError detected, returning 400');
+      return NextResponse.json(
+        { error: "Invalid event ID format" },
+        { status: 400 }
+      );
+    }
+
+    console.log('💥 Internal server error, returning 500');
     return NextResponse.json(
       { error: "Internal server error", details: error.message },
       { status: 500 }

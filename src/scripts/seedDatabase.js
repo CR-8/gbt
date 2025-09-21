@@ -1,8 +1,5 @@
-import mongoose from 'mongoose';
 import { teamData } from '../data/team/teamData.js';
-import { achievementsData } from '../data/achievements/achievementsData.js'
 import TeamMember from '../models/TeamMember.js';
-import AchievementSchema from '../models/Achievement.js'
 import dbConnect from '../lib/db.js';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
